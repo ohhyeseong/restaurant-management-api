@@ -3,6 +3,7 @@ package com.restaurant.restaurant_management_api.Ingredient.domain;
 import com.restaurant.restaurant_management_api.store.domain.Store;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,12 @@ public class Ingredient {
 
     @Column(nullable = false)
     private String unit;
+
+    @Builder
+    public Ingredient(Store store, String name, Integer stockQuantity, String unit){
+        this.store = store;
+        this.name = name;
+        this.stockQuantity = stockQuantity;
+        this.unit = unit;
+    }
 }

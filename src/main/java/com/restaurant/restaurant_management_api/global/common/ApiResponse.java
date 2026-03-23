@@ -14,6 +14,10 @@ public record ApiResponse<T>(
         return new ApiResponse<>(true, null, "요청에 성공하였습니다.", data);
     }
 
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(true, null, message, data);
+    }
+
     public static <T> ApiResponse<T> error(ErrorCode errorCode) {
         return new ApiResponse<>(false, errorCode.getCode(), errorCode.getMessage(), null);
     }

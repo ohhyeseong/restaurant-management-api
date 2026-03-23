@@ -3,6 +3,7 @@ package com.restaurant.restaurant_management_api.menu.domain;
 import com.restaurant.restaurant_management_api.store.domain.Store;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,12 @@ public class Menu {
 
     @Column(nullable = false)
     private Boolean isSoldOut = false;
+
+    @Builder
+    public Menu(Store store, String name, Integer price, Boolean isSoldOut) {
+        this.store = store;
+        this.name = name;
+        this.price = price;
+        this.isSoldOut = isSoldOut;
+    }
 }

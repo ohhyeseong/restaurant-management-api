@@ -26,4 +26,10 @@ public class Recipe {
 
     @Column(nullable = false)
     private Integer requiredQuantity;
+
+//    Recipe recipe = Recipe.builder()
+//            .menu(savedMenu)
+//            .ingredient(ingredient)
+//            .requiredQuantity(recipeDto.requiredQuantity())
+//            .build();
 }
