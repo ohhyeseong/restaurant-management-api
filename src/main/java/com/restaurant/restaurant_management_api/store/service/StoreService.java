@@ -1,5 +1,7 @@
 package com.restaurant.restaurant_management_api.store.service;
 
+import com.restaurant.restaurant_management_api.global.error.BusinessException;
+import com.restaurant.restaurant_management_api.global.error.ErrorCode;
 import com.restaurant.restaurant_management_api.store.domain.Store;
 import com.restaurant.restaurant_management_api.store.dto.StoreCreateRequest;
 import com.restaurant.restaurant_management_api.store.repository.StoreRepository;
@@ -20,10 +22,10 @@ public class StoreService {
     @Transactional
     public Long createStore(Long ownerId, StoreCreateRequest request) {
         User owner = userRepository.findById(ownerId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
         if (!owner.getRole().name().equals("OWNER")) {
-            throw new IllegalStateException("점주 권한이 있는 사용자만 매장을 등록할 수 있습니다.");
+            throw new BusinessException(ErrorCode.NOT_OWNER);
         }
 
         Store store = Store.builder()

@@ -1,6 +1,8 @@
 package com.restaurant.restaurant_management_api.user.service;
 
 import com.restaurant.restaurant_management_api.global.config.JwtTokenProvider;
+import com.restaurant.restaurant_management_api.global.error.BusinessException;
+import com.restaurant.restaurant_management_api.global.error.ErrorCode;
 import com.restaurant.restaurant_management_api.user.domain.User;
 import com.restaurant.restaurant_management_api.user.domain.UserRole;
 import com.restaurant.restaurant_management_api.user.dto.UserLoginRequest;
@@ -23,7 +25,7 @@ public class UserService {
     @Transactional
     public Long signup(UserSignupRequest request){
         if(userRepository.existsByEmail(request.email())){
-            throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         String encodedPassword = passwordEncoder.encode(request.password());
@@ -42,7 +44,7 @@ public class UserService {
     @Transactional
     public Long ownerSignup(UserSignupRequest request) {
         if(userRepository.existsByEmail(request.email())){
-            throw new IllegalArgumentException("이미 존재하는 이메일 입니다.");
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         User user = User.builder()
@@ -57,16 +59,13 @@ public class UserService {
 
     @Transactional
     public String login(UserLoginRequest request) {
-        // 1. 이메일 확인
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_EMAIL));
 
-        // 2. 비밀번호 일치 확인 (암호화된 비번과 비교)
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
 
-        // 3. 토큰 생성 및 반환
         return jwtTokenProvider.createToken(user.getEmail(), user.getRole().name());
     }
 }
