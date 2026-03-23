@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_management_api.user.controller;
 
+import com.restaurant.restaurant_management_api.user.dto.UserLoginRequest;
 import com.restaurant.restaurant_management_api.user.dto.UserSignupRequest;
 import com.restaurant.restaurant_management_api.user.service.UserService;
 import jakarta.validation.Valid;
@@ -26,5 +27,11 @@ public class UserController {
     @PostMapping("/owner-signup")
     public ResponseEntity<Long> ownerSignup(@Valid @RequestBody UserSignupRequest request) {
         return ResponseEntity.ok(userService.ownerSignup(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@Valid @RequestBody UserLoginRequest request) {
+        String token = userService.login(request);
+        return ResponseEntity.ok(token);
     }
 }
