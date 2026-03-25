@@ -4,6 +4,7 @@ import com.restaurant.restaurant_management_api.Ingredient.domain.Ingredient;
 import com.restaurant.restaurant_management_api.menu.domain.Menu;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,9 +28,11 @@ public class Recipe {
     @Column(nullable = false)
     private Integer requiredQuantity;
 
-//    Recipe recipe = Recipe.builder()
-//            .menu(savedMenu)
-//            .ingredient(ingredient)
-//            .requiredQuantity(recipeDto.requiredQuantity())
-//            .build();
+    @Builder
+    public Recipe(Menu menu, Ingredient ingredient, Integer requiredQuantity) {
+        this.menu = menu;
+        this.ingredient = ingredient;
+        this.requiredQuantity = requiredQuantity;
+    }
+
 }

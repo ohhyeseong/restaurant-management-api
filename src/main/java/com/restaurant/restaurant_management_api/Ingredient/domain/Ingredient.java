@@ -1,5 +1,7 @@
 package com.restaurant.restaurant_management_api.Ingredient.domain;
 
+import com.restaurant.restaurant_management_api.global.error.BusinessException;
+import com.restaurant.restaurant_management_api.global.error.ErrorCode;
 import com.restaurant.restaurant_management_api.store.domain.Store;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -35,5 +37,12 @@ public class Ingredient {
         this.name = name;
         this.stockQuantity = stockQuantity;
         this.unit = unit;
+    }
+
+    public void decreaseStock(int amount) {
+        if (this.stockQuantity < amount) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR); // 나중에 "재고 부족" 에러코드로 세분화 가능
+        }
+        this.stockQuantity -= amount;
     }
 }

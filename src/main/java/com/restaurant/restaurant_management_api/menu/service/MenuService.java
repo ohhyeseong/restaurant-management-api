@@ -38,16 +38,16 @@ public class MenuService {
                 .build();
         Menu savedMenu = menuRepository.save(menu);
 
-        // 2. 레시피(식자재 연결) 생성
         for (MenuCreateRequest.RecipeRequest recipeDto : request.recipes()) {
             Ingredient ingredient = ingredientRepository.findById(recipeDto.ingredientId())
-                    .orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR)); // 식자재 없음 에러
+                    .orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR));
 
             Recipe recipe = Recipe.builder()
                     .menu(savedMenu)
                     .ingredient(ingredient)
                     .requiredQuantity(recipeDto.requiredQuantity())
                     .build();
+
             recipeRepository.save(recipe);
         }
 
