@@ -3,6 +3,7 @@ package com.restaurant.restaurant_management_api.store.controller;
 import com.restaurant.restaurant_management_api.global.response.ApiResponse;
 import com.restaurant.restaurant_management_api.store.dto.StoreCreateRequest;
 import com.restaurant.restaurant_management_api.store.dto.StoreResponse;
+import com.restaurant.restaurant_management_api.store.dto.StoreUpdateRequest;
 import com.restaurant.restaurant_management_api.store.service.StoreService;
 import com.restaurant.restaurant_management_api.user.domain.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -38,4 +39,22 @@ public class StoreController {
 
         return ApiResponse.success(stores);
     }
+
+    @PutMapping("/{storeId}")
+    public ApiResponse<Void> updateStore(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long storeId,
+            @RequestBody StoreUpdateRequest request) {
+        storeService.updateStore(userDetails.getUser().getId(), storeId, request);
+        return ApiResponse.success(null);
+    }
+
+    @DeleteMapping("/{storeId}")
+    public ApiResponse<Void> deleteStore(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long storeId) {
+        storeService.deleteStore(userDetails.getUser().getId(), storeId);
+        return ApiResponse.success(null);
+    }
+
 }

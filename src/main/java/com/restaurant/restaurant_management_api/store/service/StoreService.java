@@ -5,6 +5,7 @@ import com.restaurant.restaurant_management_api.global.error.ErrorCode;
 import com.restaurant.restaurant_management_api.store.domain.Store;
 import com.restaurant.restaurant_management_api.store.dto.StoreCreateRequest;
 import com.restaurant.restaurant_management_api.store.dto.StoreResponse;
+import com.restaurant.restaurant_management_api.store.dto.StoreUpdateRequest;
 import com.restaurant.restaurant_management_api.store.repository.StoreRepository;
 import com.restaurant.restaurant_management_api.user.domain.User;
 import com.restaurant.restaurant_management_api.user.repository.UserRepository;
@@ -47,5 +48,34 @@ public class StoreService {
     public List<StoreResponse> getAllStores(Long ownerId) {
         return storeRepository.findAllByOwnerId(ownerId).stream()
                 .map(StoreResponse::from).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateStore(Long ownerId, Long storeId, StoreUpdateRequest request) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.STORE_NOT_FOUND));
+
+        if (!store.getOwner().getId().equals(ownerId)) {
+            throw new BusinessException(ErrorCode.NOT_OWNER);
+        }
+
+        store.update(
+                request.name(),
+                request.address(),
+                request.openTime(),
+                request.closeTime()
+        );
+    }
+
+    @Transactional
+    public void deleteStore(Long ownerId, Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.STORE_NOT_FOUND));
+
+        if (!store.getOwner().getId().equals(ownerId)) {
+            throw new BusinessException(ErrorCode.NOT_OWNER);
+        }
+
+        storeRepository.delete(store);
     }
 }

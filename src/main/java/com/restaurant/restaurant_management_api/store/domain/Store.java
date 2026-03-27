@@ -42,4 +42,11 @@ public class Store {
         this.openTime = openTime;
         this.closeTime = closeTime;
     }
+
+    public void update(String name,String address, LocalTime openTime, LocalTime closeTime) {
+        this.name = name;
+        this.address = address;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+    }
 }
