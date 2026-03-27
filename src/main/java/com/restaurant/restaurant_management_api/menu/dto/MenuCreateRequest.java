@@ -21,9 +21,8 @@ public record MenuCreateRequest(
         String description,
 
         @NotNull(message = "카테고리를 입력해주세요.")
-        MenuCategory category,
+        MenuCategory category
 
-        String imageUrl
 ) {
     public record RecipeRequest(
             @NotNull(message = "식자재 ID는 필수입니다.")

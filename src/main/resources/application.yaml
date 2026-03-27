@@ -21,3 +21,15 @@ spring:
 
   jwt:
     secret: your-very-long-and-secure-random-secret-key-for-jwt-signing-2026
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY} # IAM 사용자 엑세스 키
+      secret-key: ${AWS_SECRET_KEY} # IAM 사용자 비밀 키
+    region:
+      static: ap-northeast-2     # 서울 리전
+    s3:
+      bucket: your-bucket-name    # 생성한 S3 버킷 이름
+    stack:
+      auto: false

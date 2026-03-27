@@ -4,6 +4,7 @@ import com.restaurant.restaurant_management_api.Ingredient.domain.Ingredient;
 import com.restaurant.restaurant_management_api.Ingredient.repository.IngredientRepository;
 import com.restaurant.restaurant_management_api.global.error.BusinessException;
 import com.restaurant.restaurant_management_api.global.error.ErrorCode;
+import com.restaurant.restaurant_management_api.global.infra.S3Service;
 import com.restaurant.restaurant_management_api.menu.domain.Menu;
 import com.restaurant.restaurant_management_api.menu.dto.MenuCreateRequest;
 import com.restaurant.restaurant_management_api.menu.repository.MenuRepository;
@@ -14,6 +15,7 @@ import com.restaurant.restaurant_management_api.store.repository.StoreRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +25,17 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final IngredientRepository ingredientRepository;
     private final StoreRepository storeRepository;
+    private final S3Service s3Service;
 
     @Transactional
-    public Long createMenu(Long storeId, MenuCreateRequest request) {
+    public Long createMenu(Long storeId, MenuCreateRequest request, MultipartFile image) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORE_NOT_FOUND));
+
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            imageUrl = s3Service.uploadFile(image);
+        }
 
         Menu menu = Menu.builder()
                 .store(store)
@@ -35,7 +43,7 @@ public class MenuService {
                 .price(request.price())
                 .description(request.description())
                 .category(request.category())
-                .imageUrl(request.imageUrl())
+                .imageUrl(imageUrl)
                 .build();
 
         for (MenuCreateRequest.RecipeRequest recipeDto : request.recipes()) {
