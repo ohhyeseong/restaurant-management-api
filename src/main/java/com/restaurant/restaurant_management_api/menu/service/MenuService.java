@@ -22,7 +22,6 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final IngredientRepository ingredientRepository;
-    private final RecipeRepository recipeRepository;
     private final StoreRepository storeRepository;
 
     @Transactional
@@ -34,23 +33,24 @@ public class MenuService {
                 .store(store)
                 .name(request.name())
                 .price(request.price())
-                .isSoldOut(false)
+                .description(request.description())
+                .category(request.category())
+                .imageUrl(request.imageUrl())
                 .build();
-        Menu savedMenu = menuRepository.save(menu);
 
         for (MenuCreateRequest.RecipeRequest recipeDto : request.recipes()) {
             Ingredient ingredient = ingredientRepository.findById(recipeDto.ingredientId())
-                    .orElseThrow(() -> new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.INGREDIENT_NOT_FOUND));
 
             Recipe recipe = Recipe.builder()
-                    .menu(savedMenu)
+                    .menu(menu)
                     .ingredient(ingredient)
                     .requiredQuantity(recipeDto.requiredQuantity())
                     .build();
 
-            recipeRepository.save(recipe);
+            menu.addRecipe(recipe);
         }
 
-        return savedMenu.getId();
+        return menuRepository.save(menu).getId();
     }
 }

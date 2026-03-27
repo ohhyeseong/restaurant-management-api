@@ -30,18 +30,45 @@ public class Menu {
     @Column(nullable = false)
     private Integer price;
 
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MenuCategory category;
+
     @Column(nullable = false)
     private Boolean isSoldOut = false;
 
-    @OneToMany(mappedBy = "menu")
+    private String imageUrl;
+
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL) // 메뉴 삭제 시 레시피도 삭제되도록 cascade 설정 권장
     private List<Recipe> recipes = new ArrayList<>();
 
     @Builder
-    public Menu(Store store, String name, Integer price, Boolean isSoldOut, List<Recipe> recipes) {
+    public Menu(Store store, String name, Integer price, String description,
+                MenuCategory category, Boolean isSoldOut, String imageUrl) {
         this.store = store;
         this.name = name;
         this.price = price;
-        this.isSoldOut = isSoldOut;
-        this.recipes =recipes;
+        this.description = description;
+        this.category = category;
+        this.isSoldOut = isSoldOut != null ? isSoldOut : false;
+        this.imageUrl = imageUrl;
+    }
+
+    public void changeSoldOutStatus(boolean status) {
+        this.isSoldOut = status;
+    }
+
+    public void update(String name, Integer price, String description, MenuCategory category, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.category = category;
+        this.imageUrl = imageUrl;
+    }
+
+    public void addRecipe(Recipe recipe) {
+        this.recipes.add(recipe);
     }
 }

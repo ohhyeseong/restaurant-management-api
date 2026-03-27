@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_management_api.store.domain;
 
+import com.restaurant.restaurant_management_api.menu.domain.Menu;
 import com.restaurant.restaurant_management_api.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +36,9 @@ public class Store {
 
     @Column(nullable = false)
     private LocalTime closeTime;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Menu> menus = new ArrayList<>();
 
     @Builder
     public Store(User owner, String name, String address, LocalTime openTime, LocalTime closeTime) {

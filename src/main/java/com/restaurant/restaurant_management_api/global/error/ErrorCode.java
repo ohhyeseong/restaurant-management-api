@@ -17,6 +17,7 @@ public enum ErrorCode {
     // 매장/메뉴 관련 (S)
     STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "존재하지 않는 매장입니다."),
     NOT_OWNER(HttpStatus.FORBIDDEN, "S002", "점주 권한이 없습니다."),
+    INGREDIENT_NOT_FOUND(HttpStatus.NOT_FOUND, "S003", "재료를 찾을 수 없습니다."),
 
     // 공통 (C)
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C001", "서버 내부 오류가 발생했습니다."),

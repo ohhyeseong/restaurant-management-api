@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_management_api.menu.dto;
 
+import com.restaurant.restaurant_management_api.menu.domain.MenuCategory;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,15 @@ public record MenuCreateRequest(
         Integer price,
 
         @NotNull(message = "레시피 정보는 필수입니다.")
-        List<RecipeRequest> recipes
+        List<RecipeRequest> recipes,
+
+        @NotNull(message = "설명은 필수 입력란입니다.")
+        String description,
+
+        @NotNull(message = "카테고리를 입력해주세요.")
+        MenuCategory category,
+
+        String imageUrl
 ) {
     public record RecipeRequest(
             @NotNull(message = "식자재 ID는 필수입니다.")
