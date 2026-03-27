@@ -1,15 +1,17 @@
 package com.restaurant.restaurant_management_api.store.controller;
 
+import com.restaurant.restaurant_management_api.global.common.ApiResponse;
+import com.restaurant.restaurant_management_api.store.domain.Store;
 import com.restaurant.restaurant_management_api.store.dto.StoreCreateRequest;
+import com.restaurant.restaurant_management_api.store.dto.StoreResponse;
 import com.restaurant.restaurant_management_api.store.service.StoreService;
 import com.restaurant.restaurant_management_api.user.domain.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/stores")
@@ -24,7 +26,17 @@ public class StoreController {
             @RequestBody StoreCreateRequest request) {
 
         Long user = userDetails.getUser().getId();
-        // userDetails 안에 우리가 아까 넣어둔 User 엔티티가 들어있어.
         return ResponseEntity.ok(storeService.createStore(user, request));
+    }
+
+    @GetMapping
+    public ApiResponse<List<StoreResponse>> getAllStores(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        Long ownerId = userDetails.getUser().getId();
+
+        List<StoreResponse> stores = storeService.getAllStores(ownerId);
+
+        return ApiResponse.success(stores);
     }
 }

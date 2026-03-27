@@ -4,12 +4,17 @@ import com.restaurant.restaurant_management_api.global.error.BusinessException;
 import com.restaurant.restaurant_management_api.global.error.ErrorCode;
 import com.restaurant.restaurant_management_api.store.domain.Store;
 import com.restaurant.restaurant_management_api.store.dto.StoreCreateRequest;
+import com.restaurant.restaurant_management_api.store.dto.StoreResponse;
 import com.restaurant.restaurant_management_api.store.repository.StoreRepository;
 import com.restaurant.restaurant_management_api.user.domain.User;
 import com.restaurant.restaurant_management_api.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +42,10 @@ public class StoreService {
                 .build();
 
         return storeRepository.save(store).getId();
+    }
+
+    public List<StoreResponse> getAllStores(Long ownerId) {
+        return storeRepository.findAllByOwnerId(ownerId).stream()
+                .map(StoreResponse::from).collect(Collectors.toList());
     }
 }
