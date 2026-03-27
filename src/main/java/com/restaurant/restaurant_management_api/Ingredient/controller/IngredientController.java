@@ -2,7 +2,7 @@ package com.restaurant.restaurant_management_api.Ingredient.controller;
 
 import com.restaurant.restaurant_management_api.Ingredient.dto.IngredientRequest;
 import com.restaurant.restaurant_management_api.Ingredient.service.IngredientService;
-import com.restaurant.restaurant_management_api.global.common.ApiResponse;
+import com.restaurant.restaurant_management_api.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

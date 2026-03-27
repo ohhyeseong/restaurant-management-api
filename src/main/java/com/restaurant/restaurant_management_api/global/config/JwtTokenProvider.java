@@ -68,4 +68,15 @@ public class JwtTokenProvider {
         }
     }
 
+    public long getExpirationTime() {
+        return 360000;
+    }
+
+    public long getRemainingExpirationTime(String token) {
+        Date expiration = Jwts.parser().verifyWith(secretKey).build()
+                .parseSignedClaims(token).getPayload().getExpiration();
+        long now = new Date().getTime();
+        return (expiration.getTime() - now);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.restaurant.restaurant_management_api.global.common;
+package com.restaurant.restaurant_management_api.global.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.restaurant.restaurant_management_api.global.error.ErrorCode;

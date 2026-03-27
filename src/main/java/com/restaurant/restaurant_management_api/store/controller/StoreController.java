@@ -1,7 +1,6 @@
 package com.restaurant.restaurant_management_api.store.controller;
 
-import com.restaurant.restaurant_management_api.global.common.ApiResponse;
-import com.restaurant.restaurant_management_api.store.domain.Store;
+import com.restaurant.restaurant_management_api.global.response.ApiResponse;
 import com.restaurant.restaurant_management_api.store.dto.StoreCreateRequest;
 import com.restaurant.restaurant_management_api.store.dto.StoreResponse;
 import com.restaurant.restaurant_management_api.store.service.StoreService;

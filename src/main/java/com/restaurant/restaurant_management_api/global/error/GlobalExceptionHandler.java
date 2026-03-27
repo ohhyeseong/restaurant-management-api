@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_management_api.global.error;
 
-import com.restaurant.restaurant_management_api.global.common.ApiResponse;
+import com.restaurant.restaurant_management_api.global.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

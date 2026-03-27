@@ -21,3 +21,8 @@ spring:
 
   jwt:
     secret: your-very-long-and-secure-random-secret-key-for-jwt-signing-2026
+
+  data:
+    redis:
+      host: localhost
+      port: 6379

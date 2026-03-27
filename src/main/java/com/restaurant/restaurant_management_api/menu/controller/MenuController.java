@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_management_api.menu.controller;
 
-import com.restaurant.restaurant_management_api.global.common.ApiResponse;
+import com.restaurant.restaurant_management_api.global.response.ApiResponse;
 import com.restaurant.restaurant_management_api.menu.dto.MenuCreateRequest;
 import com.restaurant.restaurant_management_api.menu.service.MenuService;
 import jakarta.validation.Valid;

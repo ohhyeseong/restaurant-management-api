@@ -1,7 +1,7 @@
-// 맨 윗줄에서 Button import 제거
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import api from '../api/axiosConfig';
 
 export default function Header() {
     const navigate = useNavigate();
@@ -16,12 +16,18 @@ export default function Header() {
         }
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        setIsLoggedIn(false);
-        alert('로그아웃 되었습니다.');
-        navigate('/login');
-    };
+    const handleLogout = async () => {
+            try {
+                await api.post('/users/logout');
+            } catch (error) {
+                console.error('로그아웃 API 호출 중 오류 발생:', error);
+            } finally {
+                localStorage.removeItem('token');
+                setIsLoggedIn(false);
+                alert('로그아웃 되었습니다.');
+                window.location.href = '/login';
+            }
+        };
 
     return (
         <Navbar bg="dark" variant="dark" fixed="top" className="shadow-sm">

@@ -3,6 +3,7 @@ package com.restaurant.restaurant_management_api.user.service;
 import com.restaurant.restaurant_management_api.global.config.JwtTokenProvider;
 import com.restaurant.restaurant_management_api.global.error.BusinessException;
 import com.restaurant.restaurant_management_api.global.error.ErrorCode;
+import com.restaurant.restaurant_management_api.global.redis.RedisService;
 import com.restaurant.restaurant_management_api.user.domain.User;
 import com.restaurant.restaurant_management_api.user.domain.UserRole;
 import com.restaurant.restaurant_management_api.user.dto.UserLoginRequest;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -21,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
     @Transactional
     public Long signup(UserSignupRequest request){
@@ -66,6 +70,21 @@ public class UserService {
             throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
 
-        return jwtTokenProvider.createToken(user.getEmail(), user.getRole().name());
+        String token = jwtTokenProvider.createToken(user.getEmail(), user.getRole().name());
+
+        redisService.setValues("USER:" + user.getEmail(), token, Duration.ofMillis(jwtTokenProvider.getExpirationTime()));
+
+        return token;
+    }
+
+    public void logout(String token, String email) {
+        if (redisService.hasKey("USER:" + email)) {
+            redisService.deleteValues("USER:" + email);
+        }
+
+        long remainingTime = jwtTokenProvider.getRemainingExpirationTime(token);
+        if (remainingTime > 0) {
+            redisService.setValues("BL:" + token, "logout", Duration.ofMillis(remainingTime));
+        }
     }
 }

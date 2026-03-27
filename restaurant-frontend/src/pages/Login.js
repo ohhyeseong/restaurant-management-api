@@ -13,8 +13,11 @@ export default function Login() {
         e.preventDefault();
         try {
             const res = await api.post('/users/login', form);
+
             localStorage.setItem('token', res.data.data);
-            navigate('/dashboard');
+
+            window.location.href = '/dashboard';
+
         } catch (error) {
             alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
         }

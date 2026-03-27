@@ -1,5 +1,6 @@
 package com.restaurant.restaurant_management_api.global.config;
 
+import com.restaurant.restaurant_management_api.global.redis.RedisService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -23,6 +25,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
+
+            if (redisService.hasKey("BL:" + token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그아웃된 토큰입니다.");
+                return;
+            }
+
+            String email = jwtTokenProvider.getUserEmail(token);
+            String activeToken = redisService.getValues("USER:" + email);
+            if (activeToken == null || !activeToken.equals(token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "다른 기기에서 로그인되어 로그아웃 되었습니다.");
+                return;
+            }
+
             Authentication auth = jwtTokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }

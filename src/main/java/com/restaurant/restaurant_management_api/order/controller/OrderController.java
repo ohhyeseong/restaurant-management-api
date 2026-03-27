@@ -1,6 +1,6 @@
 package com.restaurant.restaurant_management_api.order.controller;
 
-import com.restaurant.restaurant_management_api.global.common.ApiResponse;
+import com.restaurant.restaurant_management_api.global.response.ApiResponse;
 import com.restaurant.restaurant_management_api.order.dto.OrderRequest;
 import com.restaurant.restaurant_management_api.order.service.OrderService;
 import jakarta.validation.Valid;
